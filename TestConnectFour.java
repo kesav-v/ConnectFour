@@ -12,7 +12,8 @@ public class TestConnectFour {
 		}
 		boolean turn = (position.length() % 2 == 0);
 		long k = System.nanoTime();
-		System.out.println("\n" + SolveConnectFour.solve(board, turn, position.length(), lastX(position, board), lastY(position, board)) + "\n");
+		String[] soln = SolveConnectFour.solve(board, turn, position.length(), lastX(position, board), lastY(position, board));
+		System.out.println("\n" + soln[0] + "\t" + soln[1] + "\n");
 		System.out.println((double)(System.nanoTime() - k) / 1E9 + " seconds to run");
 	}
 
@@ -23,9 +24,9 @@ public class TestConnectFour {
 				board[i][j] = ' ';
 			}
 		}
-		int[] gravRow = new int[7];
+		int[] gravRow = new int[board[0].length];
 		for (int i = 0; i < gravRow.length; i++) {
-			gravRow[i] = 5;
+			gravRow[i] = board.length - 1;
 		}
 		boolean turn = true;
 		for (int i = 0; i < s.length(); i++) {

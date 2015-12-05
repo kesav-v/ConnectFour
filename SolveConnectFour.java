@@ -28,29 +28,19 @@ public class SolveConnectFour implements ActionListener {
 	public static void main(String[] args) throws Throwable {
 		SolveConnectFour scf = new SolveConnectFour();
 		char[][] board = new char[6][7];
-		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[i].length; j++) {
+		for (int i = 0; i < board.length; i++)
+			for (int j = 0; j < board[i].length; j++)
 				board[i][j] = ' ';
-			}
-		}
+
 		solve(board, true, 0, 5, 0);
 	}
 
 	public static char solve(char[][] board, boolean turn, int turns, int x, int y) throws Throwable {
 		char result = gameOver(board, x, y);
-		// if (turns == 25) System.out.println(x + "\t" + y);
-		// if (turns > 0) {
-			// for (int i = 0; i < turns; i++) {
-				//System.out.print("  ");
-			// }
-			//System.out.println("(" + x + ", " + y + ")");
-		// }
+
 		if (result == 'R' || result == 'Y') {
-			// for (int i = 0; i < turns; i++) {
-				//System.out.print("  ");
-			// }
-			//System.out.println(result + " wins");
-			if (result == 'R') wins++;
+			if (result == 'R')
+				wins++;
 			else losses++;
 			return result;
 		}
@@ -58,27 +48,27 @@ public class SolveConnectFour implements ActionListener {
 			draws++;
 			return result;
 		}
-		int best;
-		if (turn) best = (int)'Y';
-		else best = (int)'R';
+		int best, bottom;
+		best = turn ? (int)'Y':(int)'R';
+
 		for (int i = 0; i < board[0].length; i++) {
-			int bottom;
-			for (bottom = board.length - 1; bottom >= 0; bottom--) {
-				if (board[bottom][i] == ' ') break;
-			}
-			if (bottom == -1) continue;
-			if (turn) board[bottom][i] = 'R';
-			else board[bottom][i] = 'Y';			// Thread.sleep(100);
-			int code = (int)(solve(board, !turn, turns + 1, bottom, i)); // code?
+			for (bottom = board.length - 1; bottom >= 0; bottom--)
+				if (board[bottom][i] == ' ')
+					break;
+			if (bottom == -1)
+				continue;
+			board[bottom][i] = turn ? 'R':'Y';
+
+			int code = (int)(solve(board, !turn, turns + 1, bottom, i));
 			board[bottom][i] = ' ';
-			if (turn && code == 'R') {
+			if (turn && code == 'R')
 				return 'R';
-			}
-			if (!turn && code == 'Y') {
+			if (!turn && code == 'Y')
 				return 'Y';
-			}
-			if (turn && code < best) best = code;
-			if (!turn && code > best) best = code;
+			if (turn && code < best)
+				best = code;
+			if (!turn && code > best)
+				best = code;
 		}
 		return (char)best;
 	}

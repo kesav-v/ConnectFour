@@ -39,12 +39,12 @@ public class SolveConnectFour implements ActionListener {
 	public static char solve(char[][] board, boolean turn, int turns, int x, int y) throws Throwable {
 		char result = gameOver(board, x, y);
 		// if (turns == 25) System.out.println(x + "\t" + y);
-		if (turns > 0) {
+		// if (turns > 0) {
 			// for (int i = 0; i < turns; i++) {
 				//System.out.print("  ");
 			// }
 			//System.out.println("(" + x + ", " + y + ")");
-		}
+		// }
 		if (result == 'R' || result == 'Y') {
 			// for (int i = 0; i < turns; i++) {
 				//System.out.print("  ");
@@ -55,35 +55,19 @@ public class SolveConnectFour implements ActionListener {
 			return result;
 		}
 		if (turns == board.length * board[0].length) {
-			if (result == 'R' || result == 'Y') {
-				// for (int i = 0; i < turns; i++) {
-					//System.out.print("  ");
-				// }
-				if (result == 'R') wins++;
-				else losses++;
-				//System.out.println(result + " wins");
-			}
-			else {
-				// for (int i = 0; i < turns; i++) {
-					//System.out.print("  ");
-				// }
-				//System.out.println("tie");
-				draws++;
-			}
+			draws++;
 			return result;
 		}
-		ArrayList<Integer> results = new ArrayList<Integer>();
+		ArrayList<Integer> results = new ArrayList<Integer>(board[0].length);
 		for (int i = 0; i < board[0].length; i++) {
 			int bottom;
-			for (bottom = board.length - 1; bottom >= 0; bottom--) {
-				if (board[bottom][i] == ' ') break;
-			}
-			if (bottom == -1) continue;
-			if (turn) board[bottom][i] = 'R';
-			else board[bottom][i] = 'Y';
+			if (board[0][i] == ' ')
+				continue;
+			for (bottom = board.length - 1; bottom >= 0 && board[bottom][i] != ' '; bottom--);
+			board[bottom][i] = turn ? 'R':'Y';
 			// Thread.sleep(100);
-			int code = (int)(solve(board, !turn, turns + 1, bottom, i));
-			if (results.indexOf(code) < 0) results.add(code);
+			int code = (int)(solve(board, !turn, turns + 1, bottom, i)); // code?
+			if (results.indexOf(code) < 0) results.add(code); // no clue what the heck this does o_O
 			board[bottom][i] = ' ';
 			if (turn && code == 'R') {
 				return 'R';
@@ -92,7 +76,7 @@ public class SolveConnectFour implements ActionListener {
 				return 'Y';
 			}
 		}
-		if (turn) {
+		if (turn) { // what is this? doesn't this only get called in case of a tie?
 			return (char)(min(results));
 		}
 		else {
@@ -186,10 +170,6 @@ public class SolveConnectFour implements ActionListener {
     if (countConsecutive == 4)
       return color;
     
-    for (i = 0; i < tboard.length; i++)
-      if (tboard[i][0] == ' ')
-        return 'f';
-    
-    return 't';
+    return 'f';
   }
 }

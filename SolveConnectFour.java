@@ -28,14 +28,14 @@ public class SolveConnectFour implements ActionListener {
 	public static void main(String[] args) throws Throwable {
 		SolveConnectFour scf = new SolveConnectFour();
 		char[][] board = new char[6][7];
-		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[i].length; j++) {
+		for (int i = 0; i < board.length; i++)
+			for (int j = 0; j < board[i].length; j++)
 				board[i][j] = ' ';
-			}
-		}
+
 		solve(board, true, 0, 5, 0);
 	}
 
+<<<<<<< HEAD
 	public static String[] solve(char[][] board, boolean turn, int turns, int x, int y) throws Throwable {
 		char result = gameOver(board, x, y);
 		// if (turns == 25) System.out.println(x + "\t" + y);
@@ -95,6 +95,46 @@ public class SolveConnectFour implements ActionListener {
 			}
 		}
 		return new String[] {best, (bestIndex + 1) + "" + prevStr};
+=======
+	public static int[] solve(char[][] board, boolean turn, int turns, int x, int y) throws Throwable {
+		char result = gameOver(board, x, y);
+
+		if (result != 'f')
+			if (result == 'R') {
+				wins++;
+				return new int[] {1, y};
+			}
+			else {
+				losses++;
+				return new int[] {-1, y};
+			}
+		if (turns == board.length * board[0].length) {
+			draws++;
+			return new int[] {0, y};
+		}
+		int bottom;
+		int best = turn ? -1:1;
+		int bestMove = 0;
+
+		for (int i = 0; i < board[0].length; i++) {
+			if (board[0][i] != ' ')
+				continue;
+			for (bottom = board.length - 1; bottom >= 0 && board[bottom][i] != ' '; bottom--);
+
+			board[bottom][i] = turn ? 'R':'Y';
+
+			int outcome = solve(board, !turn, turns + 1, bottom, i)[0];
+			board[bottom][i] = ' ';
+
+			if ((turn && outcome > best) || (!turn && outcome < best)) {
+				best = outcome;
+				bestMove = i;
+				if (best == 1 || best == -1)
+					return new int[] {best, bestMove};
+			}
+		}
+		return new int[] {best, bestMove};
+>>>>>>> origin/master
 	}
 
   public static char gameOver(char[][] tboard, int x, int y) {

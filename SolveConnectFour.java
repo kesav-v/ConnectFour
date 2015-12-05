@@ -36,22 +36,37 @@ public class SolveConnectFour implements ActionListener {
 	}
 
 	public static int[] solve(char[][] board, boolean turn, int turns, int x, int y) throws Throwable {
-		char result = gameOver(board, x, y);
-
-		if (result != 'f')
-			if (result == 'R') {
-				wins++;
-				return new int[] {1, y};
-			}
-			else {
-				losses++;
-				return new int[] {-1, y};
-			}
 		if (turns == board.length * board[0].length) {
 			draws++;
 			return new int[] {0, y};
 		}
-		int bottom;
+
+		char color = turn ? 'R':'Y';
+
+		int result = winningMove(board, color);
+		if (result >= 0)
+			if (turn) {
+				wins++;
+				return new int[] {1, result};
+			}
+			else {
+				losses++;
+				return new int[] {-1, result};
+			}
+
+		int bottom, outcome;
+
+		result = winningMove(board, turn ? 'Y':'R');
+		if (result >= 0) {
+			for (bottom = board.length - 1; bottom >= 0 && board[bottom][result] != ' '; bottom--);
+			board[bottom][result] = color;
+
+			outcome = solve(board, !turn, turns + 1, bottom, result)[0];
+			board[bottom][result] = ' ';
+			return new int[] {outcome, result};
+		}
+
+		
 		int best = turn ? -1:1;
 		int bestMove = 0;
 
@@ -60,9 +75,9 @@ public class SolveConnectFour implements ActionListener {
 				continue;
 			for (bottom = board.length - 1; bottom >= 0 && board[bottom][i] != ' '; bottom--);
 
-			board[bottom][i] = turn ? 'R':'Y';
+			board[bottom][i] = color;
 
-			int outcome = solve(board, !turn, turns + 1, bottom, i)[0];
+			outcome = solve(board, !turn, turns + 1, bottom, i)[0];
 			board[bottom][i] = ' ';
 
 			if ((turn && outcome > best) || (!turn && outcome < best)) {
@@ -74,6 +89,23 @@ public class SolveConnectFour implements ActionListener {
 		}
 		return new int[] {best, bestMove};
 	}
+
+	public static int winningMove(char[][] tboard, char color) {
+		int bottom;
+		char result;
+		for (int i = 0; i < tboard[0].length; i++) {
+			if (tboard[0][i] != ' ')
+				continue;
+			for (bottom = tboard.length - 1; bottom >= 0 && tboard[bottom][i] != ' '; bottom--);
+			tboard[bottom][i] = color;
+			result = gameOver(tboard, bottom, i);
+			tboard[bottom][i] = ' ';
+			if (result == color)
+				return i;
+		}
+		return -1;
+	}
+
 
   public static char gameOver(char[][] tboard, int x, int y) {
     int countConsecutive = 0;

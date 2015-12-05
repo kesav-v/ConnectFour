@@ -13,7 +13,8 @@ public class TestConnectFour {
 
 		boolean turn = (position.length() % 2 == 0);
 		long k = System.nanoTime();
-		System.out.println("\n" + SolveConnectFour.solve(board, turn, position.length(), lastX(position, board), lastY(position, board)) + "\n");
+		int[] result = SolveConnectFour.solve(board, turn, position.length(), lastX(position, board), lastY(position, board));
+		System.out.println("\n" + result[0] + " " + result[1] + "\n");
 		System.out.println((double)(System.nanoTime() - k) / 1E9 + " seconds to run");
 	}
 

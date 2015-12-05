@@ -35,42 +35,44 @@ public class SolveConnectFour implements ActionListener {
 		solve(board, true, 0, 5, 0);
 	}
 
-	public static char solve(char[][] board, boolean turn, int turns, int x, int y) throws Throwable {
+	public static int[] solve(char[][] board, boolean turn, int turns, int x, int y) throws Throwable {
 		char result = gameOver(board, x, y);
 
-		if (result == 'R' || result == 'Y') {
-			if (result == 'R')
+		if (result != 'f')
+			if (result == 'R') {
 				wins++;
-			else losses++;
-			return result;
-		}
+				return new int[] {1, y};
+			}
+			else {
+				losses++;
+				return new int[] {-1, y};
+			}
 		if (turns == board.length * board[0].length) {
 			draws++;
-			return result;
+			return new int[] {0, y};
 		}
-		int best, bottom;
-		best = turn ? (int)'Y':(int)'R';
+		int bottom;
+		int best = turn ? -1:1;
+		int bestMove = 0;
 
 		for (int i = 0; i < board[0].length; i++) {
-			for (bottom = board.length - 1; bottom >= 0; bottom--)
-				if (board[bottom][i] == ' ')
-					break;
-			if (bottom == -1)
+			if (board[0][i] != ' ')
 				continue;
+			for (bottom = board.length - 1; bottom >= 0 && board[bottom][i] != ' '; bottom--);
+
 			board[bottom][i] = turn ? 'R':'Y';
 
-			int code = (int)(solve(board, !turn, turns + 1, bottom, i));
+			int outcome = solve(board, !turn, turns + 1, bottom, i)[0];
 			board[bottom][i] = ' ';
-			if (turn && code == 'R')
-				return 'R';
-			if (!turn && code == 'Y')
-				return 'Y';
-			if (turn && code < best)
-				best = code;
-			if (!turn && code > best)
-				best = code;
+
+			if ((turn && outcome > best) || (!turn && outcome < best)) {
+				best = outcome;
+				bestMove = i;
+				if (best == 1 || best == -1)
+					return new int[] {best, bestMove};
+			}
 		}
-		return (char)best;
+		return new int[] {best, bestMove};
 	}
 
   public static char gameOver(char[][] tboard, int x, int y) {

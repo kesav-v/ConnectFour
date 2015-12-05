@@ -35,67 +35,6 @@ public class SolveConnectFour implements ActionListener {
 		solve(board, true, 0, 5, 0);
 	}
 
-<<<<<<< HEAD
-	public static String[] solve(char[][] board, boolean turn, int turns, int x, int y) throws Throwable {
-		char result = gameOver(board, x, y);
-		// if (turns == 25) System.out.println(x + "\t" + y);
-		// if (turns > 0) {
-			// for (int i = 0; i < turns; i++) {
-				//System.out.print("  ");
-			// }
-			//System.out.println("(" + x + ", " + y + ")");
-		// }
-		if (result == 'R' || result == 'Y') {
-			// for (int i = 0; i < turns; i++) {
-				//System.out.print("  ");
-			// }
-			//System.out.println(result + " wins");
-			if (result == 'R') wins++;
-			else losses++;
-			return new String[] {result + "", ""};
-		}
-		if (turns == board.length * board[0].length) {
-			draws++;
-			return new String[] {result + "", ""};
-		}
-		String best;
-		if (turn) best = "Y";
-		else best = "R";
-		int bestIndex = 0;
-		String prevStr = "";
-		for (int i = 0; i < board[0].length; i++) {
-			int bottom;
-			for (bottom = board.length - 1; bottom >= 0; bottom--) {
-				if (board[bottom][i] == ' ') break;
-			}
-			if (bottom == -1) continue;
-			if (turn) board[bottom][i] = 'R';
-			else board[bottom][i] = 'Y';			// Thread.sleep(100);
-			String[] codes = solve(board, !turn, turns + 1, bottom, i); // code?
-			String code = codes[0];
-			System.out.println(codes[0] + "\t" + codes[1]);
-			board[bottom][i] = ' ';
-			if (turn && code.charAt(0) < best.charAt(0)) {
-				best = new String(code);
-				bestIndex = i;
-				prevStr = codes[1];
-			}
-			if (!turn && code.charAt(0) > best.charAt(0)) {
-				best = new String(code);
-				bestIndex = i;
-				prevStr = codes[1];
-			}
-			if (turn && code.equals("R")) {
-				prevStr = codes[1];
-				return new String[] {"R", (i + 1) + "" + prevStr};
-			}
-			if (!turn && code == "Y") {
-				prevStr = codes[1];
-				return new String[] {"Y", (i + 1) + "" + prevStr};
-			}
-		}
-		return new String[] {best, (bestIndex + 1) + "" + prevStr};
-=======
 	public static int[] solve(char[][] board, boolean turn, int turns, int x, int y) throws Throwable {
 		char result = gameOver(board, x, y);
 
@@ -134,7 +73,6 @@ public class SolveConnectFour implements ActionListener {
 			}
 		}
 		return new int[] {best, bestMove};
->>>>>>> origin/master
 	}
 
   public static char gameOver(char[][] tboard, int x, int y) {

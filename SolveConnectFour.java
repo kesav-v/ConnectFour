@@ -58,16 +58,18 @@ public class SolveConnectFour implements ActionListener {
 			draws++;
 			return result;
 		}
-		ArrayList<Integer> results = new ArrayList<Integer>(board[0].length);
+		int best;
+		if (turn) best = (int)'Y';
+		else best = (int)'R';
 		for (int i = 0; i < board[0].length; i++) {
 			int bottom;
-			if (board[0][i] == ' ')
-				continue;
-			for (bottom = board.length - 1; bottom >= 0 && board[bottom][i] != ' '; bottom--);
-			board[bottom][i] = turn ? 'R':'Y';
-			// Thread.sleep(100);
+			for (bottom = board.length - 1; bottom >= 0; bottom--) {
+				if (board[bottom][i] == ' ') break;
+			}
+			if (bottom == -1) continue;
+			if (turn) board[bottom][i] = 'R';
+			else board[bottom][i] = 'Y';			// Thread.sleep(100);
 			int code = (int)(solve(board, !turn, turns + 1, bottom, i)); // code?
-			if (results.indexOf(code) < 0) results.add(code); // no clue what the heck this does o_O
 			board[bottom][i] = ' ';
 			if (turn && code == 'R') {
 				return 'R';
@@ -75,29 +77,10 @@ public class SolveConnectFour implements ActionListener {
 			if (!turn && code == 'Y') {
 				return 'Y';
 			}
+			if (turn && code < best) best = code;
+			if (!turn && code > best) best = code;
 		}
-		if (turn) { // what is this? doesn't this only get called in case of a tie?
-			return (char)(min(results));
-		}
-		else {
-			return (char)(max(results));
-		}
-	}
-
-	public static int min(ArrayList<Integer> results) {
-		int min = results.get(0);
-		for (int i : results) {
-			if (i < min) min = i;
-		}
-		return min;
-	}
-
-	public static int max(ArrayList<Integer> results) {
-		int max = results.get(0);
-		for (int i : results) {
-			if (i > max) max = i;
-		}
-		return max;
+		return (char)best;
 	}
 
   public static char gameOver(char[][] tboard, int x, int y) {
